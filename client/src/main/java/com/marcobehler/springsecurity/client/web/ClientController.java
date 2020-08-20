@@ -24,9 +24,14 @@ public class ClientController {
         OAuth2AuthorizedClient authorizedClient =
                 this.authorizedClientService.loadAuthorizedClient("mb-client", authentication.getName());
 
+        if (authorizedClient == null) {
+            authorizedClient = this.authorizedClientService.loadAuthorizedClient("github", authentication.getName());
+        }
+
         return Map.of(
+                "authentication", authentication,
                 "accessToken", authorizedClient.getAccessToken(),
-                "refreshToken", authorizedClient.getRefreshToken(),
+                "refreshToken", String.valueOf(authorizedClient.getRefreshToken()),
                 "principalName", authorizedClient.getPrincipalName(),
                 "clientRegistration", authorizedClient.getClientRegistration()
         );
