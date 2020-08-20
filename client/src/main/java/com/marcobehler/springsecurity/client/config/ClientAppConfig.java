@@ -36,7 +36,7 @@ public class ClientAppConfig extends WebSecurityConfigurerAdapter {
         return WebClient.builder()
                 .apply(oauth2FilterFunction.oauth2Configuration())
                 .build();
-        // tag::actualclient[]
+        // end::actualclient[]
     }
 
     @Override
