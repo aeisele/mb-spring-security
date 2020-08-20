@@ -10,23 +10,33 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 
+// tag::websecurityconfigureradapter[]
 @Configuration
 @EnableWebSecurity
 public class ClientAppConfig extends WebSecurityConfigurerAdapter {
+// end::websecurityconfigureradapter[]
 
+    // tag::methodheader[]
     @Bean
     public WebClient webClient(ClientRegistrationRepository clientRegistrationRepository,
                                OAuth2AuthorizedClientRepository authorizedClientRepository) {
+    // end::methodheader[]
 
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
+        // tag::filterfunction[]
+        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2FilterFunction =
                 new ServletOAuth2AuthorizedClientExchangeFilterFunction(
                         clientRegistrationRepository, authorizedClientRepository);
+        // end::filterfunction[]
 
-        oauth2Client.setDefaultClientRegistrationId("mb-client");
+        // tag::defaultclient[]
+        oauth2FilterFunction.setDefaultClientRegistrationId("mb-client");
+        // end::defaultclient[]
 
+        // tag::actualclient[]
         return WebClient.builder()
-                .apply(oauth2Client.oauth2Configuration())
+                .apply(oauth2FilterFunction.oauth2Configuration())
                 .build();
+        // tag::actualclient[]
     }
 
     @Override
